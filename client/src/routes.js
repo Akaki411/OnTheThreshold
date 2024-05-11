@@ -1,6 +1,6 @@
 import {ADMIN_ROUTE, HOME_ROUTE} from "./utils/consts";
 import Admin from "./pages/admin/admin";
-import Home from "./pages/home";
+import Home from "./pages/home/home";
 
 export const secureRoutes =
     [
