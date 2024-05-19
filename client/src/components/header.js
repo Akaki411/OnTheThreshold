@@ -4,11 +4,12 @@ class Header extends React.Component
 {
     state = {
         buttons: {
-            main: {title: "Главная", src: ""},
-            main1: {title: "Главная", src: ""},
-            main2: {title: "Главная", src: ""},
-            main3: {title: "Главная", src: ""},
-            main4: {title: "Главная", src: ""}
+            main: {title: "ГЛАВНАЯ", src: ""},
+            poetry: {title: "ПОЭЗИЯ", src: ""},
+            prose: {title: "ПРОЗА", src: ""},
+            translations: {title: "ПЕРЕВОДЫ", src: ""},
+            essay: {title: "ЭССЕ", src: ""},
+            news: {title: "НОВОСТИ", src: ""}
         }
     }
 
@@ -27,7 +28,7 @@ class Header extends React.Component
 const HeaderBlock = (props) => {
     return (
         <div className="header-block">
-            <a href={props.params.src} style={{color: (props.isActive ? "#AD0000" : "#FFFFFF")}}>{props.params.title}</a>
+            <a href={props.params.src} className={props.isActive ? "header-block_active" : ""}>{props.params.title}</a>
         </div>
     )
 }
