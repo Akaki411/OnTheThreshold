@@ -1,25 +1,20 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
+import {Context} from "../../index";
 
-class NewsList extends React.Component
-{
-    render()
-    {
-        return (
-            <div className="news-list">
-                <div className="news-list_header">
-                    <h1>Недавние новости</h1>
-                </div>
-                <div className="news-list-content">
-                    {this.props.data.content.map(key => {
-                        return <NewsBlock data={key} key={key.id}/>
-                    })}
-                    <div className="">
-                        <div/>
-                    </div>
-                </div>
+const NewsList = () => {
+    const {news} = useContext(Context)
+    return (
+        <div className="news-list">
+            <div className="news-list_header">
+                <h1>Недавние новости</h1>
             </div>
-        )
-    }
+            <div className="news-list-content">
+                {news.news.map(key => {
+                    return <NewsBlock data={key} key={key.id}/>
+                })}
+            </div>
+        </div>
+    )
 }
 
 const NewsBlock = (props) => {

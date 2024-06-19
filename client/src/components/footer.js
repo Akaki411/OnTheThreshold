@@ -10,9 +10,9 @@ const Footer = () => {
         navigator.clipboard.writeText(text).then(() => {})
     }
     return (
-        <div className="frame content-block">
+        <div className="frame mt50px">
             <div className="footer-links_contacts footer-email glow_on_hover"><p onClick={() => {copy("Korn.2002.04@yandex.ru")}}>Korn.2002.04@yandex.ru</p></div>
-            <div className="line"/>
+            <div className="short-line"/>
             <div className="footer-links">
                 <div className="footer-links_place">
                     <div className="header-contacts-links" style={{justifyContent: "center"}}>

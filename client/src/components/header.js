@@ -1,28 +1,22 @@
 import React from 'react';
 
-class Header extends React.Component
+const Header = (props) =>
 {
-    state = {
-        buttons: {
-            main: {title: "ГЛАВНАЯ", src: ""},
-            poetry: {title: "ПОЭЗИЯ", src: ""},
-            prose: {title: "ПРОЗА", src: ""},
-            translations: {title: "ПЕРЕВОДЫ", src: ""},
-            essay: {title: "ЭССЕ", src: ""},
-            news: {title: "НОВОСТИ", src: ""}
-        }
+    const buttons = {
+        main: {title: "ГЛАВНАЯ", src: "/"},
+        poetry: {title: "ПОЭЗИЯ", src: "/works/poetry"},
+        prose: {title: "ПРОЗА", src: "/works/prose"},
+        translation: {title: "ПЕРЕВОДЫ", src: "/works/translation"},
+        essay: {title: "ЭССЕ", src: "/works/essay"},
+        news: {title: "НОВОСТИ", src: "/news"}
     }
-
-    render()
-    {
-        return (
-            <div className="header">
-                {Object.keys(this.state.buttons).map(key => {
-                    return (<HeaderBlock params={this.state.buttons[key]} isActive={key === this.props.active} key={key}/>)
-                })}
-            </div>
-        )
-    }
+    return (
+        <div className="header">
+            {Object.keys(buttons).map(key => {
+                return (<HeaderBlock params={buttons[key]} isActive={key === props.active} key={key}/>)
+            })}
+        </div>
+    )
 }
 
 const HeaderBlock = (props) => {

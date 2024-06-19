@@ -25,6 +25,7 @@ class ImageNews extends React.Component
 
     SliceText(text, limit)
     {
+        if(!text || isNaN(limit)) return ""
         const words = text.split(" ")
         let result = words.slice(0, Math.min(limit, words.length)).join(" ")
         if (words.length > limit) result += "..."
@@ -34,14 +35,14 @@ class ImageNews extends React.Component
     render()
     {
         return (
-            <div className="image-new" style={{backgroundImage: `url(${this.props.data.img})`}} ref={this.block}>
-                <a href={"/news/" + this.props.data.id}>
+            <div className="image-new" style={{backgroundImage: `url(${process.env.REACT_APP_API_URL+ "/" + this.props.data?.img})`}} ref={this.block}>
+                <a href={"/news/" + this.props.data?.id}>
                     <div className="image-new-gradient">
                         <div className="image-new-content">
                             <div className="image-new-content_box">
-                                <h1 style={{fontSize: this.props.titleSize || "auto"}}>{this.props.data.title}</h1>
+                                <h1 style={{fontSize: this.props.titleSize || "auto"}}>{this.props.data?.title}</h1>
                                 <div className="image-new-content_description">
-                                    {this.SliceText(this.props.data.content, this.state.limit)}
+                                    {this.SliceText(this.props.data?.content, this.state.limit)}
                                 </div>
                             </div>
                         </div>
