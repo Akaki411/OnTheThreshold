@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../../index";
-import {giveAllArticles} from "../../http/contentAPI";
+import {GiveAllArticles} from "../../http/contentAPI";
 import {observer} from "mobx-react-lite";
 import BlockTitle from "../../components/blockTitle";
 
@@ -22,7 +22,7 @@ const WorksList = observer((props) => {
         props.setloader(true)
         isLoading = true
         const offset = works.worksByType[props.id].content.length
-        giveAllArticles({type: props.id, limit: 12, offset: offset}).then(data => {
+        GiveAllArticles({type: props.id, limit: 12, offset: offset}).then(data => {
             works.setWorksByType(props.id, {
                 content: works.worksByType[props.id].content.concat(data.content),
                 info: {
@@ -36,7 +36,8 @@ const WorksList = observer((props) => {
         })
     }
     useEffect(() => {
-        giveAllArticles({type: props.id, limit: props.loadLimit || 24}).then(data => {
+        document.title = "На пороге | " + props.title
+        GiveAllArticles({type: props.id, limit: props.loadLimit || 24}).then(data => {
             works.setWorksByType(props.id, {
                 content: data.content,
                 info: {
@@ -64,7 +65,7 @@ const WorksList = observer((props) => {
 
 const Block = (props) => {
     return(
-        <div className="works-list-block" style={{backgroundImage: `url(${process.env.REACT_APP_API_URL + "/" + props.data.img})`}}>
+        <a href={`/article/${props.data?.id}`} className="works-list-block" style={{backgroundImage: `url(${process.env.REACT_APP_API_URL + "/" + props.data.img})`}}>
             <div className="image-new-gradient">
                 <div className="image-new-content">
                     <div className="image-new-content_box">
@@ -75,7 +76,7 @@ const Block = (props) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
     )
 }
 

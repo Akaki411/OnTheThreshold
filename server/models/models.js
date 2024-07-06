@@ -6,6 +6,7 @@ const User = sequelize.define('user', {
     email: {type: DataTypes.STRING, unique: true, allowNull: false},
     password: {type: DataTypes.STRING, allowNull: false},
     role: {type: DataTypes.STRING, defaultValue: "USER"},
+    img: {type: DataTypes.STRING, allowNull: true},
     banned: {type: DataTypes.BOOLEAN, defaultValue: false}
 })
 const Article = sequelize.define('article', {
@@ -21,13 +22,13 @@ const Article = sequelize.define('article', {
 const Book = sequelize.define('book', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     title: {type: DataTypes.STRING, allowNull: false},
-    description: {type: DataTypes.TEXT, allowNull: true},
-
+    description: {type: DataTypes.TEXT, allowNull: true}
 })
 
 module.exports = {
     User,
-    Article
+    Article,
+    Book
 }
 
 

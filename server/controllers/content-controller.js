@@ -2,7 +2,8 @@ const ApiError = require('../error/ApiError')
 const {Article} = require("../models/models")
 const sequelize = require("sequelize");
 const uuid = require('uuid')
-const path = require('path')
+const converter = require("./converter");
+const fs = require("fs");
 
 class ContentController
 {
@@ -22,7 +23,8 @@ class ContentController
                     where: {
                         type,
                         published: {[sequelize.Op.lt]: now}
-                    }, limit, offset})
+                    },
+                    order: [['published', 'DESC']], limit, offset})
                 all = await Article.count({where: {type, published: {[sequelize.Op.lt]: now}}})
             }
             else
@@ -91,8 +93,6 @@ class ContentController
         try
         {
             let {type, title, author, description, content, published} = req.body
-            const {img} = req.files
-
             if(!type || !title || !author || !description || !content)
             {
                 return next(ApiError.badRequest(`Не указано: 
@@ -102,10 +102,21 @@ class ContentController
                 ${!description ? "описание " : ""}
                 ${!content ? "содержание" : ""}`))
             }
+            const {img} = req.files
             published = published || new Date()
-            let filename = uuid.v4() + ".jpg"
-            if(img) await img.mv(path.resolve(__dirname, '..', 'static', filename))
-
+            const filename = uuid.v4() + ".webp"
+            if(img)
+            {
+                try
+                {
+                    const webp = await converter.ConvertPhotoFromBuffer(img.data)
+                    await fs.writeFile("static/" + filename, webp, () => {})
+                }
+                catch (e)
+                {
+                    return next(ApiError.internal(e.message))
+                }
+            }
             const article = await Article.create({
                 type: type,
                 title: title,

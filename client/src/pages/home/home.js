@@ -5,7 +5,7 @@ import WorksBlock from "./worksBlock";
 import GrayBanner from "../../components/grayBanner";
 import Footer from "../../components/footer";
 import NewsList from "./newsList";
-import {giveAllArticles} from "../../http/contentAPI"
+import {GiveAllArticles} from "../../http/contentAPI"
 import {Context} from "../../index";
 import NewsImages from "./NewsImages";
 import {observer} from "mobx-react-lite";
@@ -15,11 +15,12 @@ const Home = observer(() => {
     const {works, news} = useContext(Context)
 
     useEffect(() => {
-        giveAllArticles({type: "news", limit: news.limit}).then(data => {
+        document.title = "На пороге"
+        GiveAllArticles({type: "news", limit: news.limit}).then(data => {
             news.setNews(data.content)
             news.setCount(data.info.count)
         })
-        giveAllArticles({limit: 9}).then(data => {
+        GiveAllArticles({limit: 9}).then(data => {
             works.setWorks(data.content)
             works.setCount(data.info.count)
         })

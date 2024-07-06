@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext} from 'react';
 import {Context} from "../../index";
 
 const NewsList = () => {
@@ -18,22 +18,6 @@ const NewsList = () => {
 }
 
 const NewsBlock = (props) => {
-    const [limit, setLimit] = useState(50)
-    const block = useRef()
-    useEffect(() => {
-        let x = Math.floor(block.current.clientWidth / 50)
-        setLimit(x * 7)
-    }, [])
-    window.addEventListener("resize", () => {
-        let x = Math.floor(block.current.clientWidth / 50)
-        setLimit(x * 7)
-    })
-    const wrapText = (text, offset) => {
-        const words = text.split(" ")
-        let result = words.slice(0, Math.min(offset, words.length)).join(" ")
-        if (words.length > offset) result += "..."
-        return result
-    }
     const months = {
         1: "января",
         2: "февраля",
@@ -53,12 +37,10 @@ const NewsBlock = (props) => {
         return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
     }
     return (
-        <a href={`/news/${props.data.id}`}>
-            <div className="news-list-content_block">
-                <div className="news-list-content_block_title">{props.data.title}</div>
-                <div className="news-list-content_block_content" ref={block}>{wrapText(props.data.content, limit)}</div>
-                <div className="news-list-content_block_date">{getDate(props.data.date)}</div>
-            </div>
+        <a href={`/news/${props.data.id}`} className="news-list-content_block">
+            <div className="news-list-content_block_title">{props.data.title}</div>
+            <div className="news-list-content_block_content">{props.data.content}</div>
+            <div className="news-list-content_block_date">{getDate(props.data.date)}</div>
         </a>
     )
 }

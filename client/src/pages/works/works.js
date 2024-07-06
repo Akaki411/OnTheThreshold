@@ -8,8 +8,9 @@ import Footer from "../../components/footer";
 import WorksList from "./worksList";
 import WorkTypes from "./workTypes";
 import {Bars} from 'react-loader-spinner'
+import {observer} from "mobx-react-lite";
 
-const Works = () =>
+const Works = observer(() =>
 {
     const {state} = useParams()
     const [loader, setLoader] = useState(false)
@@ -35,6 +36,6 @@ const Works = () =>
 
         </div>
     )
-}
+})
 
 export default Works;

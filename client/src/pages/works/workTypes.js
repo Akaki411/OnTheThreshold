@@ -16,7 +16,7 @@ const WorkTypes = (props) => {
                 {Object.keys(buttons).map(key => {
                     return <Block data={buttons[key]} key={key} isActive={key === props.select}/>
                 })}
-                <div className="work-types-cursor" style={{display: selectButtonOffset >= 0 ? "block" : "none", left: `calc(${(buttonSize / 2) + (buttonSize * selectButtonOffset)}% - 10px)`}}/>
+                <div className="cursor" style={{display: selectButtonOffset >= 0 ? "block" : "none", left: `calc(${(buttonSize / 2) + (buttonSize * selectButtonOffset)}% - 10px)`}}/>
             </div>
         </div>
     )

@@ -5,7 +5,7 @@ import Footer from "../../components/footer";
 import WorksBlock from "../home/worksBlock";
 import GrayBanner from "../../components/grayBanner";
 import {Context} from "../../index";
-import {giveAllArticles} from "../../http/contentAPI";
+import {GiveAllArticles} from "../../http/contentAPI";
 import BlockTitle from "../../components/blockTitle";
 import {observer} from "mobx-react-lite";
 import NewsTape from "./newsTape";
@@ -16,7 +16,8 @@ const News = observer(() => {
     const {works} = useContext(Context)
     const [loader, setLoader] = useState(false)
     useEffect(() => {
-        giveAllArticles({limit: 12}).then(data => {
+        document.title = "На пороге | Новости"
+        GiveAllArticles({limit: 12}).then(data => {
             works.setWorks(data.content)
             works.setCount(data.info.count)
         })

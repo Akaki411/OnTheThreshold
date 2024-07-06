@@ -4,7 +4,7 @@ import {Context} from "../../index";
 import {HowMuchPassed} from "../../utils/dateTime";
 import {ReactSVG} from "react-svg";
 import ClockSVG from "../../resources/vector_icons/clock.svg"
-import {giveAllArticles} from "../../http/contentAPI";
+import {GiveAllArticles} from "../../http/contentAPI";
 import {observer} from "mobx-react-lite";
 
 const NewsTape = observer((props) => {
@@ -25,7 +25,7 @@ const NewsTape = observer((props) => {
     const loadNews = () => {
         props.setloader(true)
         isLoading = true
-        giveAllArticles({type: "news", limit: 8, offset: news.news.length}).then(data => {
+        GiveAllArticles({type: "news", limit: 8, offset: news.news.length}).then(data => {
             news.setNews(news.news.concat(data.content))
             news.setCount(data.info.all)
             news.setLoaded(news.news.length)
@@ -35,7 +35,7 @@ const NewsTape = observer((props) => {
         })
     }
     useEffect(() => {
-        giveAllArticles({type: "news", limit: 8}).then(data => {
+        GiveAllArticles({type: "news", limit: 8}).then(data => {
             news.setNews(news.news.concat(data.content))
             news.setCount(data.info.all)
             news.setLoaded(news.loaded + data.info.count)

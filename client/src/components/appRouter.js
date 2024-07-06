@@ -1,23 +1,17 @@
-import React, {useContext} from 'react';
-import {Switch, Route, Redirect} from 'react-router-dom'
-import {secureRoutes, publicRoutes} from "../routes";
+import React from 'react';
+import {Routes, Route, Navigate} from 'react-router-dom'
+import {routes} from "../routes";
 import {HOME_ROUTE} from "../utils/consts";
-import {Context} from "../index";
 
 const AppRouter = () => {
-    const {user} = useContext(Context)
-
     return (
-        <Switch>
-            {user.isAuth && user.isAdmin && secureRoutes.map(({path, Component}) =>
-                <Route key={path} path={path} component={Component} exact/>
+        <Routes>
+            {routes.map(({path, Component}) =>
+                <Route key={path} path={path} element={Component} exact/>
             )}
-            {publicRoutes.map(({path, Component}) =>
-                <Route key={path} path={path} component={Component} exact/>
-            )}
-            <Redirect to={HOME_ROUTE}/>
-        </Switch>
+            <Route path="*" element={<Navigate to={HOME_ROUTE} replace={true} />}/>
+        </Routes>
     );
-};
+}
 
 export default AppRouter;
