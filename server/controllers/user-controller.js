@@ -11,24 +11,21 @@ const generateJwt = (id, email, role) => {
     )
 }
 
+
 class UserController
 {
     async registration(req, res, next)
     {
         const {email, password} = req.body
-        console.log(email, password)
-
         if (!email || !password)
         {
             return next(ApiError.badRequest('Некорректный email или password'))
         }
-        console.log(123)
         const candidate = await User.findOne({where: {email}})
         if (candidate)
         {
             return next(ApiError.badRequest('Пользователь с таким email уже существует'))
         }
-        console.log(123)
         const hashPassword = await bcrypt.hash(password, 5)
         const user = await User.create({email, password: hashPassword})
         const token = generateJwt(user.id, user.email, user.role)

@@ -33,15 +33,56 @@ const ParseElement = (data) => {
             return <CodeRenderer key={data.id} data={data.data}/>
         case "linkTool":
             return <LinkRenderer key={data.id} data={data.data}/>
+        case "image":
+            return <ImageRenderer key={data.id} data={data.data}/>
+        case "raw":
+            return <RawRenderer key={data.id} data={data.data}/>
+        case "quote":
+            return <QuoteRenderer key={data.id} data={data.data}/>
         default:
             return <br key={data.id}/>
     }
 }
 
+const QuoteRenderer = ({data}) => {
+    return (
+        <div>
+
+        </div>
+    )
+}
+
+const RawRenderer = ({data}) => {
+    return (
+        <div dangerouslySetInnerHTML={{ __html: data.html }}/>
+    )
+}
+
+const ImageRenderer = ({data}) => {
+    return (
+        <div style={{margin: "30px 0"}}>
+            <img src={data.file.url} alt="" style={{width: "100%"}}/>
+            <div className="renderer-image_caption">{data.caption}</div>
+        </div>
+    )
+}
 const LinkRenderer = ({data}) => {
+    const getDomain = (url) => {
+        url = url.replace(/^https?:\/\/?/, '')
+        url = url.split('/')[0]
+        return url
+    }
+    const delSSL = (url) => {
+        return url.replace("https", "http")
+    }
     return (
         <a className="renderer-link" href={data.link}>
-
+            <div style={{display: "flex", flexDirection: "column"}}>
+                <div className="renderer-link_title">{data.meta.title}</div>
+                <div className="renderer-link_description" dangerouslySetInnerHTML={{ __html: data.meta.description }}/>
+                <div className="renderer-link_domain">{getDomain(data.link)}</div>
+            </div>
+            <div className="renderer-link_image"><img src={delSSL(data.meta.image.url)} alt="link"/></div>
         </a>
     )
 }

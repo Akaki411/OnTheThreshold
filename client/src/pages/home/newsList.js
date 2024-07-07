@@ -37,7 +37,7 @@ const NewsBlock = (props) => {
         return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
     }
     return (
-        <a href={`/news/${props.data.id}`} className="news-list-content_block">
+        <a href={`/article/${props.data.id}`} className="news-list-content_block">
             <div className="news-list-content_block_title">{props.data.title}</div>
             <div className="news-list-content_block_content">{props.data.content}</div>
             <div className="news-list-content_block_date">{getDate(props.data.date)}</div>

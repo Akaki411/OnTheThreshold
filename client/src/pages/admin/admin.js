@@ -32,7 +32,7 @@ const Admin = observer(() =>
                     <div id="settings">Settings</div>
                 </View>
             </div>
-            <div className="back-button" onClick={() => navigate(-1)}>Назад</div>
+            <div className="back-button" onClick={() => navigate(HOME_ROUTE)}>Назад</div>
         </div>
     )
 })

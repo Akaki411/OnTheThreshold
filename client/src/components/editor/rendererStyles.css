@@ -134,16 +134,57 @@
 .renderer-code
 {
     width: calc(100% - 40px);
-    background-color: #303030;
+    background-color: transparent;
     padding: 30px 20px;
     white-space: pre-wrap;
-    font-size: 14px;
+    font-size: 16px;
+    line-height: 22px;
     border-radius: 10px;
-    font-family: monospace;
     overflow: hidden;
+    text-align: center;
 }
 .renderer-link
 {
-    width: 100%;
-    
+    display: flex;
+    width: calc(100% - 40px);
+    background-color: #202020;
+    padding: 10px 20px;
+    position: relative;
+    margin: 20px 0;
+}
+.renderer-link_title
+{
+    font-size: 16px;
+}
+.renderer-link_description
+{
+    font-size: 14px;
+    color: #AAAFB2;
+    margin: 10px 0;
+}
+.renderer-link_domain
+{
+    font-size: 14px;
+    color: #303030;
+}
+.renderer-link_image
+{
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.renderer-image_caption
+{
+    width: calc(100% - 30px);
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #AAAFB2;
+    font-size: 14px;
 }

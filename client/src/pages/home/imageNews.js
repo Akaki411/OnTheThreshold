@@ -36,7 +36,7 @@ class ImageNews extends React.Component
     {
         return (
             <div className="image-new" style={{backgroundImage: `url(${process.env.REACT_APP_API_URL+ "/" + this.props.data?.img})`}} ref={this.block}>
-                <a href={"/news/" + this.props.data?.id}>
+                <a href={"/article/" + this.props.data?.id}>
                     <div className="image-new-gradient">
                         <div className="image-new-content">
                             <div className="image-new-content_box">
