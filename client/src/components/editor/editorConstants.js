@@ -13,6 +13,7 @@ import CheckList from '@editorjs/checklist'
 import Delimiter from '@editorjs/delimiter'
 import InlineCode from '@editorjs/inline-code'
 import SimpleImage from '@editorjs/simple-image'
+import AudioTool from 'editorjs-audio-tool'
 
 export const EDITOR_JS_TOOLS = {
     embed: Embed,
@@ -31,8 +32,8 @@ export const EDITOR_JS_TOOLS = {
         class: ImageTool,
         config: {
             endpoints: {
-                byFile: process.env.REACT_APP_API_URL + '/api/tools/upload-image', // Your backend file uploader endpoint
-                byUrl: process.env.REACT_APP_API_URL + '/api/tools/upload-image', // Your endpoint that provides uploading by Url
+                byFile: process.env.REACT_APP_API_URL + '/api/tools/upload-image',
+                byUrl: process.env.REACT_APP_API_URL + '/api/tools/upload-image',
             },
             captionPlaceholder: "Подпись..."
         }
@@ -44,4 +45,10 @@ export const EDITOR_JS_TOOLS = {
     delimiter: Delimiter,
     inlineCode: InlineCode,
     simpleImage: SimpleImage,
+    audio: {
+        class: AudioTool,
+        config: {
+            endpointUrl: process.env.REACT_APP_API_URL + '/api/tools/upload-audio'
+        }
+    }
 }

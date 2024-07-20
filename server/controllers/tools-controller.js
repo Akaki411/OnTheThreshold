@@ -3,6 +3,7 @@ const request = require('request')
 const uuid = require('uuid')
 const converter = require("./converter")
 const fs = require("fs")
+const path = require("path")
 
 class ToolsController
 {
@@ -55,11 +56,27 @@ class ToolsController
                 {
                     return res.json({success : 0})
                 }
-                return res.json({success : 1, file: {url : `http://${process.env.HOST}:${process.env.PORT}/${fileName}`}})
+                return res.json({success : 1, file: {url : fileName}})
             })
         }
         catch (e)
         {
+            return res.json({success : 0})
+        }
+    }
+
+    async UploadAudio(req, res)
+    {
+        try
+        {
+            const {file} = req.files
+            let fileName = uuid.v4() + ".mp3"
+            await file.mv(path.resolve(__dirname, '..', 'static', fileName))
+            return res.json({url : fileName, type: "audio/mpeg3"})
+        }
+        catch (e)
+        {
+            console.log(e)
             return res.json({success : 0})
         }
     }

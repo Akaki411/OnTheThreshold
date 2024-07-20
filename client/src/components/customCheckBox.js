@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 
 const CustomCheckBox = (props) => {
-    const [active, setActive] = useState(false)
+    const [active, setActive] = useState(props.isActive)
     const onClick = () => {
+        if (props.disable) return
         setActive(!active)
         props.onClick(!active)
     }

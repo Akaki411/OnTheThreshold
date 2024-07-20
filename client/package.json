@@ -25,6 +25,7 @@
     "@editorjs/warning": "^1.4.0",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
+    "editorjs-audio-tool": "^1.0.1",
     "jwt-decode": "^3.1.2",
     "mobx": "^6.12.5",
     "mobx-react-lite": "^4.0.7",
