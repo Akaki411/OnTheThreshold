@@ -4,8 +4,12 @@ import {ReactSVG} from "react-svg"
 import WarningSVG from "../../resources/vector_icons/warning.svg"
 import LinkSVG from "../../resources/vector_icons/link.svg"
 import QuoteSVG from "../../resources/vector_icons/quote.svg"
+import SoundSVG from "../../resources/vector_icons/sound.svg"
+import PlaySVG from "../../resources/vector_icons/play.svg"
+import PauseSVG from "../../resources/vector_icons/pause.svg"
 import CustomCheckBox from "../customCheckBox";
 import MusicPlayer from "./musicPlayer";
+import ReadProgress from "../readProgress";
 
 const GenerateString = (length) => {
     const lib = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
@@ -18,74 +22,90 @@ const GenerateString = (length) => {
 }
 
 const EditorRenderer = (props) => {
-    const [audioSrc, setAudioSrc] = useState("")
+    const [play, setPlay] = useState(false)
     const [current, setCurrent] = useState("")
-    let player = createRef()
+    const ref = createRef()
+
+    const Load = (id, url) => {
+        if(current !== id)
+        {
+            ref.current.src = process.env.REACT_APP_API_URL + "/" + url
+            setCurrent(id)
+        }
+        setPlay(ref.current.paused)
+        if(ref.current.paused)
+        {
+            ref.current.play()
+        }
+        else
+        {
+            ref.current.pause()
+        }
+    }
 
     return (
         <div className="renderer">
-            <MusicPlayer
-                ref={player}
-                src={audioSrc}
-            />
+            <ReadProgress/>
+            {props.data.map(key => {return key.type}).includes("audio") && <MusicPlayer
+                ref={ref}
+                onPlay={setPlay}
+            />}
             {props.data.map(key => {
-                return ParseElement(key, {
-                    setSrc: setAudioSrc,
-                    current: current
-                })
+                return <ParseElement key={key.id} data={key} callback={Load} current={current} isPlaying={play}/>
             })}
         </div>
     )
 }
 
-const ParseElement = (data, callbacks) => {
+const ParseElement = ({data, callback, current, isPlaying}) => {
     switch (data.type)
     {
         case "header":
-            return <HeaderRenderer key={data.id} data={data.data}/>
+            return <HeaderRenderer data={data.data}/>
         case "paragraph":
-            return <ParagraphRenderer key={data.id} data={data.data}/>
+            return <ParagraphRenderer data={data.data}/>
         case "table":
-            return <TableRenderer key={data.id} data={data.data}/>
+            return <TableRenderer data={data.data}/>
         case "list":
-            return <ListRenderer key={data.id} data={data.data}/>
+            return <ListRenderer data={data.data}/>
         case "warning":
-            return <WarningRenderer key={data.id} data={data.data}/>
+            return <WarningRenderer data={data.data}/>
         case "code":
-            return <CodeRenderer key={data.id} data={data.data}/>
+            return <CodeRenderer data={data.data}/>
         case "linkTool":
-            return <LinkRenderer key={data.id} data={data.data}/>
+            return <LinkRenderer data={data.data}/>
         case "image":
-            return <ImageRenderer key={data.id} data={data.data}/>
+            return <ImageRenderer data={data.data}/>
         case "raw":
-            return <RawRenderer key={data.id} data={data.data}/>
+            return <RawRenderer data={data.data}/>
         case "quote":
-            return <QuoteRenderer key={data.id} data={data.data}/>
+            return <QuoteRenderer data={data.data}/>
         case "checklist":
-            return <CheckListRenderer key={data.id} data={data.data}/>
+            return <CheckListRenderer data={data.data}/>
         case "delimiter":
-            return <DelimiterRenderer key={data.id}/>
+            return <DelimiterRenderer/>
         case "audio":
-            return <AudioRenderer key={data.id} id={data.id} data={data.data} callbacks={callbacks}/>
+            return <AudioRenderer id={data.id} data={data.data} callback={callback} isActive={(current === data.id) && isPlaying}/>
         default:
             return <br key={data.id}/>
     }
 }
 
-const AudioRenderer = ({id, data, callbacks}) => {
-    const [play, setPlay] = useState(false)
-    const Play = () => {
-        setPlay(!play)
-        if(callbacks.current !== id)
-        {
-            callbacks.setSrc(data.url)
-        }
-    }
+const AudioRenderer = ({id, data, callback, isActive}) => {
+    console.log(data)
     return (
         <div className="audio-renderer">
-            <div className="audio-renderer_button" onClick={Play}>
-                {play ? <div className="pause"/> : <div className="play"/>}
+            <ReactSVG src={SoundSVG} className="svg32icons"/>
+            <div className="audio-renderer_audio-place">
+                <div>
+                    <div style={{textAlign: "right"}}>{data.title}</div>
+                    <div className="audio-renderer_audio_caption">{data.caption}</div>
+                </div>
+                <div className="audio-renderer_button" onClick={() => {callback(id, data.src)}}>
+                    {isActive ? <ReactSVG src={PauseSVG} className="svg32icons"/> : <ReactSVG src={PlaySVG} className="svg32icons"/>}
+                </div>
             </div>
+
         </div>
     )
 }

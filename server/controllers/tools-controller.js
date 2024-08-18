@@ -76,7 +76,6 @@ class ToolsController
         }
         catch (e)
         {
-            console.log(e)
             return res.json({success : 0})
         }
     }

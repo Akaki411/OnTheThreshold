@@ -5,7 +5,8 @@ import {
     HOME_ROUTE,
     LOGOUT_ROUTE,
     NEWS_ROUTE,
-    WORKS_ROUTE
+    WORKS_ROUTE,
+    BOOKS_ROUTE
 } from "./utils/consts";
 import Admin from "./pages/admin/admin";
 import Home from "./pages/home/home";
@@ -14,6 +15,7 @@ import News from "./pages/news/news";
 import Auth from "./pages/auth/auth";
 import Logout from "./pages/logout/logout";
 import Article from "./pages/article/article";
+import Books from "./pages/books/books"
 
 export const routes =
     [
@@ -44,5 +46,9 @@ export const routes =
         {
             path: ARTICLE_ROUTE,
             Component: <Article/>
+        },
+        {
+            path: BOOKS_ROUTE,
+            Component: <Books/>
         }
     ]

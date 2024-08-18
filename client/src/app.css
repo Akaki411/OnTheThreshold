@@ -230,16 +230,25 @@ select:focus
 {
     width: 32px;
     height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .svg24icons
 {
     width: 24px;
     height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .svg12icons
 {
     width: 12px;
     height: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .svg32icons div,
 .svg24icons div,
@@ -602,6 +611,8 @@ select:focus
     height: 30px;
     display: flex;
     align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .works-scrollbar-block_title h1
 {
@@ -847,7 +858,7 @@ select:focus
 }
 .admin-menu
 {
-    width: 80px;
+    width: 50px;
     height: 100%;
     background-color: #202020;
     position: relative;
@@ -1069,4 +1080,20 @@ select:focus
     color: #AAAFB2;
     font-size: 15px;
     padding: 0 10px;
+}
+.read-progress
+{
+    position: fixed;
+    width: 100%;
+    height: 2px;
+    top: 0;
+    left: 0;
+}
+.read-progress_thumb
+{
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #AD0000;
+    height: 2px;
 }

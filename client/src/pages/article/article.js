@@ -14,7 +14,6 @@ const Article = () => {
 
     useEffect(() => {
         GiveArticle(id).then(data => {
-            // console.log(data)
             setTitle(data.title)
             setContent(JSON.parse(data.content))
         })

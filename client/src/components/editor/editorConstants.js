@@ -14,6 +14,7 @@ import Delimiter from '@editorjs/delimiter'
 import InlineCode from '@editorjs/inline-code'
 import SimpleImage from '@editorjs/simple-image'
 import AudioTool from 'editorjs-audio-tool'
+import SimpleAudio from "./audio/simple-audio"
 
 export const EDITOR_JS_TOOLS = {
     embed: Embed,
@@ -46,9 +47,10 @@ export const EDITOR_JS_TOOLS = {
     inlineCode: InlineCode,
     simpleImage: SimpleImage,
     audio: {
-        class: AudioTool,
+        class: SimpleAudio,
         config: {
-            endpointUrl: process.env.REACT_APP_API_URL + '/api/tools/upload-audio'
+            endpoint: process.env.REACT_APP_API_URL + '/api/tools/upload-audio',
+            static: process.env.REACT_APP_API_URL + "/"
         }
     }
 }

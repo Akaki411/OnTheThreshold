@@ -22,7 +22,7 @@ const AdminMenu = (props) => {
                     return <Block data={buttons[key]} id={key} key={key} onClick={(data)=>pressButton(data)}/>
                 })}
             </div>
-            <div className="cursor" style={{right: -10, top: -10, transform: `translateY(${offset}px) rotateZ(45deg)`}}/>
+            <div className="cursor" style={{right: -5, top: -5, width: 10, height: 10, transform: `translateY(${offset}px) rotateZ(45deg)`}}/>
         </div>
     )
 }
@@ -35,7 +35,7 @@ const Block = (props) => {
     }
     return (
         <div className="admin-menu-block" ref={block} onClick={() => {props.onClick({id: props.id, offset: getOffset()})}}>
-            <ReactSVG className="svg32icons" src={props.data.icon}/>
+            <ReactSVG className="svg24icons" src={props.data.icon}/>
         </div>
     )
 }
