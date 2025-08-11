@@ -1,0 +1,41 @@
+.book-container
+{
+    margin-top: 50px;
+    width: 90%;
+    display: grid;
+    grid-template-areas:
+            "image title"
+            "image info"
+            "image description"
+            "image price"
+            "addons button";
+
+}
+.book-container_image
+{
+    grid-area: image;
+}
+.book-container_title
+{
+    grid-area: title;
+}
+.book-container_info
+{
+    grid-area: info;
+}
+.book-container_description
+{
+    grid-area: description;
+}
+.book-container_price
+{
+    grid-area: price;
+}
+.book-container_addons
+{
+    grid-area: addons;
+}
+.book-container_button
+{
+    grid-area: button;
+}
