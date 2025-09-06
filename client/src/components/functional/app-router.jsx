@@ -1,7 +1,7 @@
 import React from 'react';
 import {Routes, Route, Navigate} from 'react-router-dom'
-import {routes} from "../routes.jsx";
-import {HOME_ROUTE} from "../utils/consts";
+import {routes} from "../../routes.jsx";
+import {HOME_ROUTE} from "../../utils/consts.js";
 
 const AppRouter = () => {
     return (

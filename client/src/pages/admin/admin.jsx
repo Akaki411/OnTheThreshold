@@ -1,18 +1,18 @@
 import React, {useContext, useEffect, useState} from 'react';
-import AdminMenu from "./adminMenu.jsx";
-import View from "../../components/view";
-import NewArticle from "./newArticle.jsx";
+import AdminMenu from "./main/adminMenu.jsx";
+import View from "../../components/functional/view.jsx";
+import NewArticle from "./articles/newArticle.jsx";
 import {useNavigate} from "react-router-dom";
 import {Context} from "../../main.jsx"
 import {HOME_ROUTE, AUTH_ROUTE} from "../../utils/consts";
 import {observer} from "mobx-react-lite";
-import BooksControl from "./booksControl.jsx";
+import BooksControl from "./books/booksControl.jsx";
 
 
 const Admin = observer(() =>
 {
     const {user} = useContext(Context)
-    const [activePanel, setActivePanel] = useState("books")
+    const [activePanel, setActivePanel] = useState("add_article")
     const navigate = useNavigate()
     useEffect(() => {
         document.title = "На пороге | ADMIN"
@@ -25,7 +25,7 @@ const Admin = observer(() =>
     })
     return (
         <div className="wrapper limited-frame">
-            <AdminMenu onSelect={(id) => {setActivePanel(id)}}/>
+            <AdminMenu onSelect={setActivePanel}/>
             <div className="content admin-content-place">
                 <View value={activePanel}>
                     <NewArticle id="add_article"/>

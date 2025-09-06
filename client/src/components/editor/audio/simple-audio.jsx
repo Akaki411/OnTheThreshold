@@ -74,7 +74,7 @@ export default class SimpleImage
                 console.warn("The address of the static server has not been added. To play the preview, you must specify the address in the config")
             }
 
-            audio.src = this.config.static + link
+            audio.src = this.config.static + "/content/images/" + link
             audio.load()
         })
 
@@ -87,7 +87,7 @@ export default class SimpleImage
             {
                 console.warn("The address of the static server has not been added. To play the preview, you must specify the address in the config")
             }
-            audio.src = this.config.static + link
+            audio.src = this.config.static + "/content/images/" + link
             audio.load()
             block.removeChild(selector)
             block.appendChild(audioPlace)

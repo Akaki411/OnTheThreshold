@@ -4,7 +4,7 @@ import List from '@editorjs/list'
 import Warning from '@editorjs/warning'
 import Code from '@editorjs/code'
 import LinkTool from '@editorjs/link'
-import ImageTool from '@editorjs/image'
+import ImageTool from "./image/simple-image.jsx"
 import Raw from '@editorjs/raw'
 import Header from '@editorjs/header'
 import Quote from '@editorjs/quote'
@@ -31,11 +31,7 @@ export const EDITOR_JS_TOOLS = {
     image: {
         class: ImageTool,
         config: {
-            endpoints: {
-                byFile: import.meta.env.VITE_APP_API_URL + '/api/tools/upload-image',
-                byUrl: import.meta.env.VITE_APP_API_URL + '/api/tools/upload-image',
-            },
-            captionPlaceholder: "Подпись..."
+            uploadUrl: import.meta.env.VITE_APP_API_URL + '/api/tools/upload-image'
         }
     },
     raw: Raw,

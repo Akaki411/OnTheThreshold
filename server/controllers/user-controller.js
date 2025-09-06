@@ -1,12 +1,12 @@
 const ApiError = require('../error/ApiError');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const {User} = require('../models/models')
+const {User, Basket} = require('../models/models')
 
 const generateJwt = (id, email, role) => {
     return jwt.sign(
         {id, email, role},
-        process.env.SECRET_KEY,
+        process.env.JWT_PASSWORD_CODE,
         {expiresIn: '24h'}
     )
 }
@@ -18,38 +18,32 @@ class UserController
     {
         try 
         {
-            const { nickname, sex, email, password } = req.body
+            const { userId, nickname, sex, email, password } = req.body
             if (!nickname || !sex || !email || !password) 
             {
-                return next(ApiError.badRequest('Не все обязательные поля были предоставлены (nickname, sex, email, password)'))
+                return next(ApiError.badRequest("Reg data is not exist"))
             }
             if (password.length < 6) 
             {
-                return next(ApiError.badRequest('Пароль должен быть не менее 6 символов'))
+                return next(ApiError.badRequest('The password must be longer than 6 characters'))
             }
-            const candidate = await User.findOne({where: {[require('sequelize').Op.or]: [{ email }, { nickname }]}})
-            if (candidate) 
+            const user = await User.findOne({where: {user_id: userId, email: email}})
+            if(!user)
             {
-                if (candidate.email === email) 
-                {
-                    return next(ApiError.badRequest(`Пользователь с email '${email}' уже существует`))
-                }
-                if (candidate.nickname === nickname) 
-                {
-                    return next(ApiError.badRequest(`Пользователь с никнеймом '${nickname}' уже существует`))
-                }
+                return next(ApiError.badRequest('Incorrect user data token'))
             }
             const hashPassword = await bcrypt.hash(password, 10);
-            const newUser = await User.create({
+            await user.update({
                 nickname,
                 sex,
                 email,
-                password: hashPassword
+                password: hashPassword,
+                is_active: true
             })
-            await Basket.create({ user_id: newUser.user_id })
-            const token = generateJwt(newUser.user_id, newUser.email, newUser.role)
-            return res.json({ token })
-
+            await user.save()
+            await Basket.findOrCreate({where: {user_id: user.user_id}, defaults: {user_id: user.user_id}})
+            const token = jwt.sign({id: user.user_id, email: user.email, role: user.role}, process.env.JWT_PASSWORD_CODE, {expiresIn: '24h'})
+            return res.json({token})
         } 
         catch (e) 
         {
@@ -61,33 +55,31 @@ class UserController
     {
         try 
         {
-            const { email, password } = req.body
+            const {email, password} = req.body
             if (!email || !password) 
             {
-                return next(ApiError.badRequest('Incorrect email or password'));
+                return next(ApiError.badRequest('Incorrect email or password'))
             }
-            const user = await User.findOne({ where: { email } });
+            const user = await User.findOne({where: {email}})
             if (!user) 
             {
-                return next(ApiError.internal('Incorrect email or password'));
+                return next(ApiError.badRequest('Incorrect email or password'))
             }
-            if (user.is_banned) 
+            if (user.dataValues.is_banned || !user.dataValues.is_active)
             {
-                return next(ApiError.forbidden('User has been blocked'));
+                return next(ApiError.forbidden('User has been blocked'))
             }
-            const isPassCorrect = await bcrypt.compare(password, user.password);
+            const isPassCorrect = await bcrypt.compare(password, user.dataValues.password)
             if (!isPassCorrect) 
             {
-                return next(ApiError.internal('Incorrect email or password'));
+                return next(ApiError.badRequest('Incorrect email or password'))
             }
-            const token = generateJwt(user.user_id, user.email, user.role);
-
-            return res.json({ token });
-
+            const token = jwt.sign({id: user.dataValues.user_id, email: user.dataValues.email, role: user.dataValues.role}, process.env.JWT_PASSWORD_CODE, {expiresIn: '24h'})
+            return res.json({token})
         } 
         catch (e) 
         {
-            next(ApiError.internal('Login error: ' + e.message));
+            next(ApiError.internal('Login error: ' + e.message))
         }
     }
 
@@ -95,6 +87,70 @@ class UserController
     {
         const token = generateJwt(req.user.id, req.user.email, req.user.role)
         return res.json({token})
+    }
+
+    async check_nickname(req, res, next)
+    {
+        const {nickname} = req.query
+        if(!nickname)
+        {
+            return next(ApiError.badRequest('Nickname is not exist'))
+        }
+        const user = await User.findOne({where: {nickname}, attributes: ["user_id"]})
+        return res.json({find: !!user})
+    }
+
+    async check_email(req, res, next)
+    {
+        const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        const {email} = req.query
+        if(!email)
+        {
+            return next(ApiError.badRequest('Email is not exist'))
+        }
+        if(!isValidEmail(email))
+        {
+            return next(ApiError.badRequest('Email is not exist'))
+        }
+        let user = await User.findOne({where: {email}, attributes: ["user_id", "is_active"]})
+        if(user && user?.dataValues?.is_active)
+        {
+            return res.json({find: true})
+        }
+        else
+        {
+            if(!user)
+            {
+                user = await User.create({
+                    email: email
+                })
+            }
+            const token = jwt.sign({id: user.dataValues.user_id, email: email}, process.env.JWT_REG_CODE)
+            console.log(process.env.DOMAIN + ":3000/registration?token=" + token)
+            return res.json({find: false})
+        }
+    }
+
+    async check_reg_token(req, res, next)
+    {
+        const {token} = req.query
+        if(!token)
+        {
+            return next(ApiError.badRequest('Token is not exist'))
+        }
+        try
+        {
+            const decoded = jwt.verify(token, process.env.JWT_REG_CODE);
+            return res.json({
+                valid: true,
+                email: decoded.email,
+                userId: decoded.id
+            })
+        }
+        catch (e)
+        {
+            return res.json({valid: false})
+        }
     }
 }
 

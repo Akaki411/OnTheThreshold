@@ -1,15 +1,15 @@
-import React from 'react'
+import React from 'react';
 
-const TextField = ({
-        onInput = () => {},
-        onChange = () => {},
-        type = "text",
-        deathTime = 1500,
-        width = 250,
-        height = 40,
-        style = {},
-        name = "Имя"}) =>
-    {
+
+const BigTextField = ({
+    onInput = () => {},
+    onChange = () => {},
+    deathTime = 1500,
+    width,
+    height,
+    style = {},
+    name = "Имя"
+}) => {
     const [isActive, setActive] = React.useState(false)
     const [inputValue, setInputValue] = React.useState("")
     const input = React.useRef(null)
@@ -23,9 +23,15 @@ const TextField = ({
     return (
         <label style={{width: width, height: height, display: "block", marginTop: "14px", position: "relative"}}>
             <span className={isActive ? "ui-input_name ui-input_name_active" : "ui-input_name"}>{name}{isActive ? "" : "..."}</span>
-            <input type={type} style={style} className="ui-input" ref={input} onFocus={() => {setActive(true)}} onBlur={() => {setActive(event.target.value !== "")}} onInput={(key) => {setInputValue(key.target.value)}}/>
+            <textarea
+                style={{padding: "10px 10px", ...style}}
+                className="ui-input"
+                ref={input}
+                onFocus={() => {setActive(true)}}
+                onBlur={() => {setActive(event.target.value !== "")}}
+                onInput={(key) => {setInputValue(key.target.value)}}/>
         </label>
     )
 }
 
-export default TextField
+export default BigTextField;

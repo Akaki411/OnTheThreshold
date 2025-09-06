@@ -1,44 +1,53 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../../main.jsx";
-import {GiveAllArticles} from "../../http/contentAPI.jsx";
+import {GetAllArticles} from "../../http/contentAPI.jsx";
 import {observer} from "mobx-react-lite";
 import BlockTitle from "../../components/block-title.jsx";
 
-const WorksList = observer((props) => {
+const WorksList = observer(({
+    id,
+    className = '',
+    isStatic = false,
+    setLoader = () => {},
+    title = "Работы",
+    loadLimit = 24,
+    style,
+    renderLimit = Number.MAX_SAFE_INTEGER
+}) => {
     const {works} = useContext(Context)
-    const [worksData, setWorks] = useState(works.worksByType[props.id])
+    const [worksData, setWorks] = useState(works.worksByType[id])
     let isLoading = false
     let firstLoad = false
     const handleScroll = () => {
-        if(props.static) return
+        if(isStatic) return
         const posY = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)
-        const itsAll = works.worksByType[props.id]?.info.all <= works.worksByType[props.id]?.info.loaded
+        const itsAll = works.worksByType[id]?.info.all <= works.worksByType[id]?.info.loaded
         if(posY > 0.90 && !isLoading && !itsAll && firstLoad)
         {
             loadWorks()
         }
     }
     const loadWorks = () => {
-        props.setloader(true)
+        setLoader(true)
         isLoading = true
-        const offset = works.worksByType[props.id].content.length
-        GiveAllArticles({type: props.id, limit: 12, offset: offset}).then(data => {
-            works.setWorksByType(props.id, {
-                content: works.worksByType[props.id].content.concat(data.content),
+        const offset = works.worksByType[id].content.length
+        GetAllArticles({type_id: id, limit: 12, offset: offset}).then(data => {
+            works.setWorksByType(id, {
+                content: works.worksByType[id].content.concat(data.content),
                 info: {
                     all: data.info.all,
-                    loaded: works.worksByType[props.id].info.loaded + data.info.count
+                    loaded: works.worksByType[id].info.loaded + data.info.count
                 }
             })
-            setWorks(works.worksByType[props.id].content)
-            props.setloader(false)
+            setWorks(works.worksByType[id].content)
+            setLoader(false)
             isLoading = false
         })
     }
     useEffect(() => {
-        document.title = "На пороге | " + props.title
-        GiveAllArticles({type: props.id, limit: props.loadLimit || 24}).then(data => {
-            works.setWorksByType(props.id, {
+        document.title = "На пороге | " + title
+        GetAllArticles({type_id: id, limit: loadLimit}).then(data => {
+            works.setWorksByType(id, {
                 content: data.content,
                 info: {
                     all: data.info.all,
@@ -52,26 +61,31 @@ const WorksList = observer((props) => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, [])
     return (
-        <div className="frame" style={props.style || {}}>
-            <BlockTitle title={props.title}/>
+        <div className={"frame " + className} style={style}>
+            <BlockTitle title={title}/>
             <div className="works-list-place">
-                {worksData?.slice(0, props.renderLimit || Number.MAX_SAFE_INTEGER).map(key => {
-                    return <Block key={key.id} data={key}/>
+                {worksData?.slice(0, renderLimit).map(key => {
+                    return <Block key={key.id} id={key.id} title={key.title} content={key.content} img={key.img}/>
                 })}
             </div>
         </div>
     )
 })
 
-const Block = (props) => {
+const Block = ({
+    id,
+    title,
+    content,
+    img
+}) => {
     return(
-        <a href={`/article/${props.data?.id}`} className="works-list-block" style={{backgroundImage: `url(${process.env.REACT_APP_API_URL + "/" + props.data.img})`}}>
+        <a href={`/article/${id}`} className="works-list-block" style={{backgroundImage: `url(${import.meta.env.VITE_APP_API_URL + "/content/images/" + img})`}}>
             <div className="image-new-gradient">
                 <div className="image-new-content">
                     <div className="image-new-content_box">
-                        <h1 style={{fontSize: 24}}>{props.data?.title}</h1>
+                        <h1 style={{fontSize: 24}}>{title}</h1>
                         <div className="image-new-content_description" style={{fontSize: 12}}>
-                            {props.data?.content}
+                            {content}
                         </div>
                     </div>
                 </div>

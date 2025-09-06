@@ -5,7 +5,11 @@ import PauseSVG from "../../resources/vector_icons/pause.svg"
 import ReplaySVG from "../../resources/vector_icons/replay.svg"
 import SoundSVG from "../../resources/vector_icons/sound.svg"
 
-const MusicPlayer = React.forwardRef((props, ref) => {
+const MusicPlayer = React.forwardRef(({
+    onUpdate = () => {},
+    onPlay = () => {},
+    src = ""
+}, ref) => {
     const [play, setPlay] = useState(false)
     const [cantPlay, setCantPlay] = useState(true)
     const [position, setPosition] = useState(0)
@@ -17,7 +21,7 @@ const MusicPlayer = React.forwardRef((props, ref) => {
             if(!key.srcElement.paused)
             {
                 setPosition(key.srcElement.currentTime / key.srcElement.duration)
-                if(props.onUpdate) props.onUpdate(position)
+                onUpdate(position)
             }
         })
         ref.current.addEventListener('canplay', (key) => {
@@ -41,7 +45,7 @@ const MusicPlayer = React.forwardRef((props, ref) => {
             await ref.current.pause()
         }
         setPlay(ref.current.paused)
-        props.onPlay(!ref.current.paused)
+        onPlay(!ref.current.paused)
     }
     const SetPosition = (value) => {
         if(ref.current.readyState === 0) return
@@ -54,7 +58,7 @@ const MusicPlayer = React.forwardRef((props, ref) => {
     }
     return (
         <div className="music-player_position">
-            <audio src={process.env.REACT_APP_API_URL + "/" + props.src} ref={ref} loop={loop}/>
+            <audio src={import.meta.env.VITE_APP_API_URL + "/content/audio/" + src} ref={ref} loop={loop}/>
             <div className="music-player frame" style={{transform: `translateY(${visible ? "0" : "50px"})`}}>
                 <div onClick={Play} className="music-player-cell glow_on_hover">
                     {play ? <ReactSVG src={PlaySVG}/> : <ReactSVG src={PauseSVG}/>}

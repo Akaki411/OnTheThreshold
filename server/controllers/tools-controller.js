@@ -52,7 +52,7 @@ class ToolsController
             const {image} = req.files
             let fileName = uuid.v4() + ".webp"
             const webp = await converter.ConvertPhotoFromBuffer(image.data)
-            await fs.writeFile("static/" + fileName, webp, err => {
+            await fs.writeFile("resources/pictures/" + fileName, webp, err => {
                 if (err)
                 {
                     return res.json({success : 0})
@@ -72,7 +72,7 @@ class ToolsController
         {
             const {file} = req.files
             let fileName = uuid.v4() + ".mp3"
-            await file.mv(path.resolve(__dirname, '..', 'static', fileName))
+            await file.mv(path.resolve(__dirname, '..', 'resources/audio/', fileName))
             return res.json({url : fileName, type: "audio/mpeg3"})
         }
         catch (e)

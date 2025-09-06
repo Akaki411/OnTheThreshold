@@ -1,15 +1,16 @@
 import React from 'react';
-import BlockTitle from "../../components/block-title.jsx";
-import AdminAddGenre from "./adminAddGenre.jsx";
-import CustomDateTime from "../../components/custom-date-time.jsx";
-import CustomMultiPhotoUpload from "../../components/custom-multi-photo-upload.jsx";
-import CustomTextArea from "../../components/custom-text-area.jsx";
+import BlockTitle from "../../../components/block-title.jsx";
+import AdminAddGenre from "./admin-add-genre.jsx";
+import CustomDateTime from "../../../components/interactive-inputs/date-time-picker.jsx";
+import PhotoUploader from "../../../components/photo-uploader.jsx";
+import BigTextField from "../../../components/interactive-inputs/big-text-field.jsx";
 import AdminSelectGenre from "./adminSelectGenre.jsx";
-import CustomCheckBox from "../../components/custom-check-box.jsx";
-import CustomEditor from "../../components/editor/customEditor";
+import CustomCheckBox from "../../../components/custom-check-box.jsx";
+import CustomEditor from "../../../components/editor/customEditor.jsx";
 import {ReactSVG} from "react-svg";
-import DocSVG from "../../resources/vector_icons/doc.svg"
-import {CreateBook} from "../../http/contentAPI.jsx";
+import DocSVG from "../../../resources/vector_icons/doc.svg"
+import {CreateBook} from "../../../http/contentAPI.jsx";
+import AnimateToggle from "../../../components/interactive-inputs/animate-toggle.jsx";
 
 const BooksControl = () => {
     const [genres, setGenres] = React.useState([])
@@ -80,12 +81,12 @@ const BooksControl = () => {
                         </div>
                     </div>
                     <div className="admin-new-article-options mt20px">
-                        <CustomTextArea placeholder="Введите описание" onChange={text => setDescription(text)}/>
+                        <BigTextField placeholder="Введите описание" onChange={text => setDescription(text)}/>
                     </div>
                 </div>
                 <div style={{flex: 1}}>
                     <div className="admin-new-article-options_block_title mt20px">Обложка и фото</div>
-                    <CustomMultiPhotoUpload className="mt20px" onChange={data => setPhotos(data)}/>
+                    <PhotoUploader className="mt20px" onChange={data => setPhotos(data)}/>
                 </div>
 
                 {/*аддоны*/}
@@ -100,7 +101,8 @@ const BooksControl = () => {
                     <div style={{display: "flex"}} className="mt20px">
                         <div className="admin-new-article-options_block">
                             <div className="admin-new-article-options_block_title"><span style={{marginRight: 20}}>Электронная версия</span>
-                                <CustomCheckBox onClick={key => setEBook(key)}/></div>
+                                <AnimateToggle onChange={setEBook}/>
+                            </div>
                             {eBook && <div><input style={{fontSize: 14}} placeholder="Цена..." type="number"
                                                  className="content admin-new-article_input-title"
                                                  onChange={(data) => setBookPrice(parseInt(data.target.value))}/>
@@ -155,7 +157,7 @@ const BooksControl = () => {
                 </button>
             </div>
         </div>
-    );
-};
+    )
+}
 
 export default BooksControl;

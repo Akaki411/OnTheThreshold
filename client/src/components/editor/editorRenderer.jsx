@@ -7,9 +7,9 @@ import QuoteSVG from "../../resources/vector_icons/quote.svg"
 import SoundSVG from "../../resources/vector_icons/sound.svg"
 import PlaySVG from "../../resources/vector_icons/play.svg"
 import PauseSVG from "../../resources/vector_icons/pause.svg"
-import CustomCheckBox from "../custom-check-box.jsx";
 import MusicPlayer from "./musicPlayer.jsx";
 import ReadProgress from "../read-progress.jsx";
+import AnimateToggle from "../interactive-inputs/animate-toggle.jsx";
 
 const GenerateString = (length) => {
     const lib = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
@@ -29,7 +29,7 @@ const EditorRenderer = (props) => {
     const Load = (id, url) => {
         if(current !== id)
         {
-            ref.current.src = process.env.REACT_APP_API_URL + "/" + url
+            ref.current.src = import.meta.env.VITE_APP_API_URL + "/content/audio/" + url
             setCurrent(id)
         }
         setPlay(ref.current.paused)
@@ -126,7 +126,7 @@ const CheckListRenderer = ({data}) => {
             {data.items.map(key => {
                 return (
                     <div key={key.id} className="checklist-renderer_point">
-                        <CustomCheckBox isActive={key.checked} disable={true}/>
+                        <AnimateToggle disabled={true} defaultValue={key.checked}/>
                         {key.text}
                     </div>
                 )
@@ -152,10 +152,33 @@ const RawRenderer = ({data}) => {
 }
 
 const ImageRenderer = ({data}) => {
+    const {
+        src = '',
+        alt = '',
+        alignment = 'center',
+        size = 'medium'
+    } = data
+
+    if (!src) return null
+
+    const containerClasses = [
+        'image-renderer-container',
+        `image-renderer-align-${alignment}`
+    ].join(' ')
+
+    const imageClasses = [
+        'image-renderer-image',
+        `image-renderer-size-${size}`
+    ].join(' ')
+
     return (
-        <div style={{margin: "30px 0"}}>
-            <img src={data.file.url} alt="" style={{width: "100%"}}/>
-            <div className="renderer-image_caption">{data.caption}</div>
+        <div className={containerClasses}>
+            <img
+                src={import.meta.env.VITE_APP_API_URL + "/content/images/" + src}
+                alt={alt}
+                className={imageClasses}
+                loading="lazy" // Ленивая загрузка для производительности
+            />
         </div>
     )
 }
@@ -202,7 +225,7 @@ const ListRenderer = ({data}) => {
     return (
         <ul style={{listStyleType: data.style === "ordered" ? "decimal" : "disc"}}>
             {data.items.map(key => {
-                return <li key={key}>{key}</li>
+                return <li key={key.content}>{key.content}</li>
             })}
         </ul>
     )
@@ -210,7 +233,8 @@ const ListRenderer = ({data}) => {
 
 const TableRenderer = ({data}) => {
     let withHeader = data.withHeadings
-    data.content = data.content.map(row => {
+
+    data.content = data.content.filter(key => {return Array.isArray(key)}).map(row => {
         return {
             rows: row.map(cell => {
                 return {

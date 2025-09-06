@@ -78,7 +78,7 @@ class ContentController
             if (img) 
             {
                 const webp = await converter.ConvertPhotoFromBuffer(img.data)
-                await fs.writeFile("static/" + filename, webp)
+                await fs.writeFile("resources/pictures/" + filename, webp)
             }
             await Article.create({
                 type_id,

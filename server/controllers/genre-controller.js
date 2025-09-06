@@ -49,10 +49,10 @@ class GenreController
     {
         try 
         {
-            let {id} = req.body
-            if (!id) 
+            let {id} = req.params
+            if (!id || isNaN(Number(id)))
             {
-                return next(ApiError.badRequest("Не указан id"))
+                return next(ApiError.badRequest("Incorrect ID"))
             }
             await Genre.destroy({where: { genre_id: id }})
             const genres = await Genre.findAll()

@@ -21,7 +21,7 @@ const HeaderContacts = () => {
                         <ReactSVG className="svg32icons glow_on_hover" src={VkLogo}/>
                     </a>
                 </div>
-                <a href="/books/">
+                <a href="https://t.me/worked_time">
                     <div className="header-contacts-button">ЗАКАЗАТЬ КНИГУ</div>
                 </a>
             </div>

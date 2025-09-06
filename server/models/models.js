@@ -5,13 +5,14 @@ const { DataTypes } = require('sequelize');
 
 const User = sequelize.define('user', {
     user_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    nickname: { type: DataTypes.STRING, unique: true, allowNull: false },
+    nickname: { type: DataTypes.STRING, unique: true, allowNull: true },
     sex: { type: DataTypes.STRING, allowNull: false, defaultValue: 'male' },
     email: { type: DataTypes.STRING, unique: true, allowNull: false },
-    password: { type: DataTypes.STRING, allowNull: false },
+    password: { type: DataTypes.STRING, allowNull: true },
     role: { type: DataTypes.STRING, defaultValue: 'USER' },
     img: { type: DataTypes.STRING, allowNull: true },
     is_banned: { type: DataTypes.BOOLEAN, defaultValue: false },
+    is_active: { type: DataTypes.BOOLEAN, defaultValue: false }
 }, {
     indexes: [
         { fields: ['nickname'] },
@@ -165,11 +166,13 @@ const OrderItem = sequelize.define('order_item', {
 const ArticleType = sequelize.define('article_type', {
     type_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     title: { type: DataTypes.STRING, unique: true, allowNull: false },
+    name: { type: DataTypes.STRING, unique: true, allowNull: false },
     is_show_on_pages: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
 }, {
     timestamps: false,
     indexes: [
-        { fields: ['title'] }
+        { fields: ['title'] },
+        { fields: ['name'] }
     ]
 })
 

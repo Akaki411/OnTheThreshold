@@ -1,20 +1,26 @@
 import React, {useRef} from 'react';
 
-const WorkTypes = (props) => {
-    const panel = useRef(null)
-    const buttons = {
-        poetry: {title: "ПОЭЗИЯ", src: "/works/poetry"},
-        prose: {title: "ПРОЗА", src: "/works/prose"},
-        translation: {title: "ПЕРЕВОДЫ", src: "/works/translation"},
-        essay: {title: "ЭССЕ", src: "/works/essay"}
+const calcOffset = (types, type) => {
+    for (const key of types)
+    {
+        const index = types.indexOf(key)
+        if(key.name === type) return index
     }
-    const buttonSize = 100 / Object.keys(buttons).length
-    const selectButtonOffset = Object.keys(buttons).indexOf(props.select)
+    return 0
+}
+
+const WorkTypes = ({
+    select,
+    data = []
+}) => {
+    const panel = useRef(null)
+    const buttonSize = 100 / data.length
+    const selectButtonOffset = calcOffset(data, select)
     return (
         <div className="content gray-banner mt50px">
             <div className="frame work-types-panel" ref={panel}>
-                {Object.keys(buttons).map(key => {
-                    return <Block data={buttons[key]} key={key} isActive={key === props.select}/>
+                {data.map(key => {
+                    return <Block key={key.type_id} isActive={key.type_id === select} src={"/works/" + key.name} title={key.title.toUpperCase()}/>
                 })}
                 <div className="cursor" style={{display: selectButtonOffset >= 0 ? "block" : "none", left: `calc(${(buttonSize / 2) + (buttonSize * selectButtonOffset)}% - 10px)`}}/>
             </div>
@@ -22,10 +28,14 @@ const WorkTypes = (props) => {
     )
 }
 
-const Block = (props) => {
+const Block = ({
+    src,
+    isActive,
+    title
+}) => {
     return (
-        <a href={props.data.src} className="work-types-block" style={{color: props.isActive ? "#AD0000" : "#FFFFFF"}}>
-            {props.data.title}
+        <a href={src} className="work-types-block" style={{color: isActive ? "#AD0000" : "#FFFFFF"}}>
+            {title}
         </a>
     )
 }

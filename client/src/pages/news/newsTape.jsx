@@ -4,7 +4,7 @@ import {Context} from "../../main.jsx";
 import {HowMuchPassed} from "../../utils/dateTime";
 import {ReactSVG} from "react-svg";
 import ClockSVG from "../../resources/vector_icons/clock.svg"
-import {GiveAllArticles} from "../../http/contentAPI.jsx";
+import {GetAllArticles} from "../../http/contentAPI.jsx";
 import {observer} from "mobx-react-lite";
 
 const NewsTape = observer((props) => {
@@ -25,7 +25,7 @@ const NewsTape = observer((props) => {
     const loadNews = () => {
         props.setloader(true)
         isLoading = true
-        GiveAllArticles({type: "news", limit: 8, offset: news.news.length}).then(data => {
+        GetAllArticles({type: "news", limit: 8, offset: news.news.length}).then(data => {
             news.setNews(news.news.concat(data.content))
             news.setCount(data.info.all)
             news.setLoaded(news.news.length)
@@ -35,7 +35,7 @@ const NewsTape = observer((props) => {
         })
     }
     useEffect(() => {
-        GiveAllArticles({type: "news", limit: 8}).then(data => {
+        GetAllArticles({type_id: -1, limit: 8}).then(data => {
             news.setNews(news.news.concat(data.content))
             news.setCount(data.info.all)
             news.setLoaded(news.loaded + data.info.count)
@@ -46,7 +46,7 @@ const NewsTape = observer((props) => {
         return () => window.removeEventListener("scroll", handleScroll)
     }, [])
     return (
-        <div>
+        <div className="news-tape-place">
             <BlockTitle title="Новости"/>
             <div className="content" ref={tape}>
                 {newsData.map(key => {
@@ -62,8 +62,8 @@ const Block = (props) => {
 
     return (
         <div className="news-tape-block">
-            <a href={`/article/${props.data.id}`}>
-                <div className="news-tape-block_image" style={{backgroundImage: `url(${process.env.REACT_APP_API_URL + "/" + props.data.img})`}}/>
+            <a href={`/article/${props.data.id}`} className="news-tape-block_image-place">
+                <img className="news-tape-block_image" src={`${import.meta.env.VITE_APP_API_URL + "/content/images/" + props.data.img}`}/>
             </a>
             <div className="news-tape-block_content-place">
                 <div className="news-tape-block_content frame">

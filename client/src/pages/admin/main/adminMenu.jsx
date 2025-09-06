@@ -1,8 +1,8 @@
 import React, {useRef, useState} from 'react';
-import PlusSVG from "../../resources/vector_icons/plus.svg"
-import GearSVG from "../../resources/vector_icons/gear.svg"
-import StatsSVG from "../../resources/vector_icons/stats.svg"
-import BooksSVG from "../../resources/vector_icons/books.svg"
+import PlusSVG from "../../../resources/vector_icons/plus.svg"
+import GearSVG from "../../../resources/vector_icons/gear.svg"
+import StatsSVG from "../../../resources/vector_icons/stats.svg"
+import BooksSVG from "../../../resources/vector_icons/books.svg"
 import {ReactSVG} from "react-svg"
 
 const AdminMenu = (props) => {
